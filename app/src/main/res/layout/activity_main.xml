@@ -17,4 +17,10 @@
         android:layout_height="wrap_content"
         android:onClick="onAsyncBtnClick"
         android:text="asynchronous request" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onRxjavaBtnClick"
+        android:text="Rxjava request" />
 </LinearLayout>
