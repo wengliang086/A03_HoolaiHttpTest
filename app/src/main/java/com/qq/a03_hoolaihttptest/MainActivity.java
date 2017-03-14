@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
                     }
 
                     @Override
