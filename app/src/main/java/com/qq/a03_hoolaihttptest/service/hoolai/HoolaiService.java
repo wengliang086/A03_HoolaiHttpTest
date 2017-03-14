@@ -21,7 +21,14 @@ public interface HoolaiService {
     @GET("login/trialLogin.hl")
     Call<HoolaiResponse<User>> trialLogin(@Query("channelId") String channelId, @Query("productId") int productId, @Header("udid") String udid);
 
+    /**
+     * 这里不知道是不是Bug，@Header("udid") 使用RxJava的方式时取不到值
+     * @param channelId
+     * @param productId
+     * @param udid @Header("udid") 使用RxJava的方式时取不到值
+     * @return
+     */
     @GET("login/trialLogin.hl")
-    Observable<HoolaiResponse<User>> rxJavaLogin(@Query("channelId") String channelId, @Query("productId") int productId, @Header("udid") String udid);
+    Observable<HoolaiResponse<User>> rxJavaLogin(@Query("channelId") String channelId, @Query("productId") int productId, @Query("udid") String udid);
 
 }

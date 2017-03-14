@@ -90,24 +90,7 @@ public class MainActivity extends AppCompatActivity {
         Observable<HoolaiResponse<User>> observable = service.rxJavaLogin("1", 1, "456oooppp");
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<HoolaiResponse<User>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(HoolaiResponse<User> userHoolaiResponse) {
-                        User user = userHoolaiResponse.getValue();
-                        Toast.makeText(MainActivity.this, new Gson().toJson(user), Toast.LENGTH_SHORT).show();
-                    }
-                });
-//                .subscribe(new Observer<HoolaiResponse<User>>() {
+//                .subscribe(new Subscriber<HoolaiResponse<User>>() {
 //                    @Override
 //                    public void onCompleted() {
 //
@@ -124,5 +107,22 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(MainActivity.this, new Gson().toJson(user), Toast.LENGTH_SHORT).show();
 //                    }
 //                });
+                .subscribe(new Observer<HoolaiResponse<User>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(HoolaiResponse<User> userHoolaiResponse) {
+                        User user = userHoolaiResponse.getValue();
+                        Toast.makeText(MainActivity.this, new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
