@@ -1,4 +1,4 @@
-package com.qq.a03_hoolaihttptest;
+package com.qq.a03_hoolaihttptest.service.hoolai;
 
 import android.os.Parcel;
 import android.os.Parcelable;
