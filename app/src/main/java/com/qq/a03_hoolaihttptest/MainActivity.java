@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.qq.a03_hoolaihttptest.module.User;
-import com.qq.a03_hoolaihttptest.service.flowable.SubscriberOnNextListener;
 import com.qq.a03_hoolaihttptest.service.flowable.ProgressSubscriber;
+import com.qq.a03_hoolaihttptest.service.flowable.SubscriberOnNextListener;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiResponse;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiService;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiServiceCreater;
@@ -101,7 +102,13 @@ public class MainActivity extends AppCompatActivity {
         Flowable<HoolaiResponse<User>> observable = service.rxJavaLogin("1", 1, "456oooppp");
         observable = observable.observeOn(AndroidSchedulers.mainThread())//指定 Subscriber 所运行在的线程。或者叫做事件消费的线程。
                 .subscribeOn(Schedulers.io());//指定 subscribe() 所发生的线程，即 Observable.OnSubscribe 被激活时所处的线程。或者叫做事件产生的线程。
-        final int type = new Random().nextInt(3);//多种方式
+        int max = 5;
+        int rType = new Random().nextInt(max);//多种方式
+        int t = Integer.parseInt(((EditText) findViewById(R.id.id_et_type)).getText().toString());
+        if (t >= 0 && t < 5) {
+            rType = t;
+        }
+        final int type = rType;
         switch (type) {
             case 0://原始方式
                 observable.subscribe(new Subscriber<HoolaiResponse<User>>() {

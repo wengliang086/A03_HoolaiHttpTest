@@ -32,6 +32,8 @@ public class ProgressDialogHandler extends Handler {
     private void initProcessDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(mContext);
+            progressDialog.setMessage("网络请求中。。。");
+            progressDialog.setTitle("Title");
             progressDialog.setCancelable(cancelable);
             if (cancelable) {
                 progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
