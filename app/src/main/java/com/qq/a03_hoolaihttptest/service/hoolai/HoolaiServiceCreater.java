@@ -5,7 +5,7 @@ import com.qq.a03_hoolaihttptest.interceptor.LoggingInterceptor;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -21,7 +21,8 @@ public class HoolaiServiceCreater {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 //如果没有这一行 会报异常Caused by: java.lang.IllegalArgumentException: Could not locate call adapter for rx.Observable
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
 
         OkHttpClient client = new OkHttpClient.Builder()
                 //拦截器是一种强大的机制,可以监视、重写和重试调用

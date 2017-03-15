@@ -12,22 +12,21 @@ import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiResponse;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiService;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiServiceCreater;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.io.IOException;
 import java.util.Random;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+//import rx.Observable;
+//import rx.Observer;
+//import rx.Subscriber;
+//import rx.android.schedulers.AndroidSchedulers;
+//import rx.functions.Action0;
+//import rx.functions.Action1;
+//import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity_RxJava1_Code extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private HoolaiService service = HoolaiServiceCreater.create();
@@ -63,12 +62,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<HoolaiResponse<User>> call, Response<HoolaiResponse<User>> response) {
                 User user = response.body().getValue();
-                Toast.makeText(MainActivity.this, new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity_RxJava1_Code.this, new Gson().toJson(user), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<HoolaiResponse<User>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity_RxJava1_Code.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -90,25 +89,16 @@ public class MainActivity extends AppCompatActivity {
         Looper.loop();
     }
 
-    public void onRxjavaBtnClick(View view) {
-        Flowable<HoolaiResponse<User>> observable = service.rxJavaLogin("1", 1, "456oooppp");
+    public void onRxjavaBtnClick(View view) {/*
+        Observable<HoolaiResponse<User>> observable = service.rxJavaLogin("1", 1, "456oooppp");
         observable = observable.observeOn(AndroidSchedulers.mainThread())//指定 Subscriber 所运行在的线程。或者叫做事件消费的线程。
                 .subscribeOn(Schedulers.io());//指定 subscribe() 所发生的线程，即 Observable.OnSubscribe 被激活时所处的线程。或者叫做事件产生的线程。
-        final int type = new Random().nextInt(2);//两种方式
+        final int type = new Random().nextInt(3);//三种方式
         switch (type) {
             case 0:
                 observable.subscribe(new Subscriber<HoolaiResponse<User>>() {
-
                     @Override
-                    public void onSubscribe(Subscription s) {
-                        //这一步是必须，我们通常可以在这里做一些初始化操作，调用request()方法表示初始化工作已经完成
-                        //调用request()方法，会立即触发onNext()方法
-                        //在onComplete()方法完成，才会再执行request()后边的代码
-                        s.request(Long.MAX_VALUE);
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onCompleted() {
                     }
 
                     @Override
@@ -118,32 +108,49 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(HoolaiResponse<User> userHoolaiResponse) {
                         User user = userHoolaiResponse.getValue();
-                        Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity_RxJava1_Code.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
             case 1:
-                Consumer<HoolaiResponse<User>> nextConsumer = new Consumer<HoolaiResponse<User>>() {
+                observable.subscribe(new Observer<HoolaiResponse<User>>() {
                     @Override
-                    public void accept(HoolaiResponse<User> userHoolaiResponse) throws Exception {
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(HoolaiResponse<User> userHoolaiResponse) {
                         User user = userHoolaiResponse.getValue();
-                        Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity_RxJava1_Code.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
                     }
-                };
-                Consumer<Throwable> errorConsumer = new Consumer<Throwable>() {
+                });
+                break;
+            case 2:
+                Action1<HoolaiResponse<User>> nextAction = new Action1<HoolaiResponse<User>>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(MainActivity.this, "type=" + type + " Error", Toast.LENGTH_SHORT).show();
+                    public void call(HoolaiResponse<User> userHoolaiResponse) {
+                        User user = userHoolaiResponse.getValue();
+                        Toast.makeText(MainActivity_RxJava1_Code.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
                     }
                 };
-                Action complateAction = new Action() {
+                Action1<Throwable> errorAction = new Action1<Throwable>() {
                     @Override
-                    public void run() throws Exception {
-                        Toast.makeText(MainActivity.this, "type=" + type + " Complate", Toast.LENGTH_SHORT).show();
+                    public void call(Throwable o) {
+                        Toast.makeText(MainActivity_RxJava1_Code.this, "type=" + type + " Error", Toast.LENGTH_SHORT).show();
                     }
                 };
-                observable.subscribe(nextConsumer, errorConsumer, complateAction);
+                Action0 complateAction = new Action0() {
+                    @Override
+                    public void call() {
+                        Toast.makeText(MainActivity_RxJava1_Code.this, "type=" + type + " Complate", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                observable.subscribe(nextAction, errorAction, complateAction);
                 break;
         }
-    }
+    */}
 }
