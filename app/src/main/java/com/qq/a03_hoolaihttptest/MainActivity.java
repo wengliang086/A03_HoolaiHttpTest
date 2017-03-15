@@ -94,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
         Flowable<HoolaiResponse<User>> observable = service.rxJavaLogin("1", 1, "456oooppp");
         observable = observable.observeOn(AndroidSchedulers.mainThread())//指定 Subscriber 所运行在的线程。或者叫做事件消费的线程。
                 .subscribeOn(Schedulers.io());//指定 subscribe() 所发生的线程，即 Observable.OnSubscribe 被激活时所处的线程。或者叫做事件产生的线程。
-        final int type = new Random().nextInt(2);//两种方式
+        final int type = new Random().nextInt(3);//多种方式
         switch (type) {
-            case 0:
+            case 0://原始方式
                 observable.subscribe(new Subscriber<HoolaiResponse<User>>() {
 
                     @Override
@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        Toast.makeText(MainActivity.this, "type=" + type + " Error", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -122,7 +123,38 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            case 1:
+            case 1://优化1：去掉包装层的方式（直接能拿到User对象）
+                HoolaiServiceCreater.rxJavaLogin(new Subscriber<User>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(Long.MAX_VALUE);
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Toast.makeText(MainActivity.this, "type=" + type + " Error", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }, "1", 1, "456oooppp");
+                break;
+            case 2://优化2：在优化1的基础上，只关心onNext方法
+                HoolaiServiceCreater.rxJavaLogin(new ProgressSubscriber<User>(this, new SubscriberOnNextListener<User>() {
+                    @Override
+                    public void onNext(User user) {
+                        Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                    }
+                }), "1", 1, "456oooppp");
+                break;
+            case 3:
                 Consumer<HoolaiResponse<User>> nextConsumer = new Consumer<HoolaiResponse<User>>() {
                     @Override
                     public void accept(HoolaiResponse<User> userHoolaiResponse) throws Exception {
