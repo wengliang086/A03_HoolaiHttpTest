@@ -8,6 +8,9 @@ import org.reactivestreams.Subscriber;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -66,5 +69,37 @@ public class HoolaiServiceCreater {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    /**
+     * rxJavaLogin 方法优化（封装了线程相关操作）
+     *
+     * @param subscriber
+     * @param channelId
+     * @param productId
+     * @param udid
+     */
+    public static void rxJavaLogin2(Subscriber<User> subscriber, String channelId, int productId, String udid) {
+        toSubscribe(create().rxJavaLogin(channelId, productId, udid), subscriber);
+    }
+
+    private static <T> void toSubscribe(Flowable<HoolaiResponse<T>> flowable, Subscriber<T> subscriber) {
+        flowable.map(new HttpResultFunc<T>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public static void rxJavaLogin3(Observer<User> observer, String channelId, int productId, String udid) {
+        toObserver(create().rxJavaLogin2(channelId, productId, udid), observer);
+    }
+
+    private static <T> void toObserver(Observable<HoolaiResponse<T>> flowable, Observer<T> observer) {
+        flowable.map(new HttpResultFunc<T>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 }

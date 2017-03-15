@@ -8,9 +8,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.qq.a03_hoolaihttptest.module.User;
+import com.qq.a03_hoolaihttptest.service.flowable.SubscriberOnNextListener;
+import com.qq.a03_hoolaihttptest.service.flowable.ProgressSubscriber;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiResponse;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiService;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiServiceCreater;
+import com.qq.a03_hoolaihttptest.service.observable.ObservableOnNextListener;
+import com.qq.a03_hoolaihttptest.service.observable.ProgressObservable;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -27,6 +31,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * 参照博客 http://gank.io/post/56e80c2c677659311bed9841
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -147,14 +154,33 @@ public class MainActivity extends AppCompatActivity {
                 }, "1", 1, "456oooppp");
                 break;
             case 2://优化2：在优化1的基础上，只关心onNext方法
-                HoolaiServiceCreater.rxJavaLogin(new ProgressSubscriber<User>(this, new SubscriberOnNextListener<User>() {
+                /*HoolaiServiceCreater.rxJavaLogin(new ProgressSubscriber<User>(this, new SubscriberOnNextListener<User>() {
+                    @Override
+                    public void onNext(User user) {
+                        Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                    }
+                }), "1", 1, "456oooppp");*/
+                //优化rxJavaLogin2方法内部
+                HoolaiServiceCreater.rxJavaLogin2(new ProgressSubscriber<User>(this, new SubscriberOnNextListener<User>() {
+                    @Override
+                    public void onNext(User user) {
+                        Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
+                    }
+                }), "1", 1, "456oooppp");
+                /**
+                 * Test取消Http请求
+                 */
+//                new ProgressObservable<Object>(this, null).onCancelProgress();
+                break;
+            case 3:
+                HoolaiServiceCreater.rxJavaLogin3(new ProgressObservable<User>(this, new ObservableOnNextListener<User>() {
                     @Override
                     public void onNext(User user) {
                         Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
                     }
                 }), "1", 1, "456oooppp");
                 break;
-            case 3:
+            case 4:
                 Consumer<HoolaiResponse<User>> nextConsumer = new Consumer<HoolaiResponse<User>>() {
                     @Override
                     public void accept(HoolaiResponse<User> userHoolaiResponse) throws Exception {

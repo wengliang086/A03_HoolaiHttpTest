@@ -3,6 +3,7 @@ package com.qq.a03_hoolaihttptest.service.hoolai;
 import com.qq.a03_hoolaihttptest.module.User;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -31,9 +32,11 @@ public interface HoolaiService {
      */
     @GET("login/trialLogin.hl")
     Flowable<HoolaiResponse<User>> rxJavaLogin(@Query("channelId") String channelId, @Query("productId") int productId, @Query("udid") String udid);
+
     /**
      * RxJava1 代码
      */
 //    Observable<HoolaiResponse<User>> rxJavaLogin(@Query("channelId") String channelId, @Query("productId") int productId, @Query("udid") String udid);
-
+    @GET("login/trialLogin.hl")
+    Observable<HoolaiResponse<User>> rxJavaLogin2(@Query("channelId") String channelId, @Query("productId") int productId, @Query("udid") String udid);
 }
