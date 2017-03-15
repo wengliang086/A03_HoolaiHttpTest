@@ -13,8 +13,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HoolaiServiceCreater {
 
-    //    private static final String BASE_URL = "http://61.148.167.74:11116/access_open_api";
-    private static final String BASE_URL = "http://192.168.150.37:8080/access_open_api/";
+    private static final String BASE_URL = "http://61.148.167.74:11116/access_open_api/";
+//    private static final String BASE_URL = "http://192.168.150.37:8080/access_open_api/";
 
     public static HoolaiService create() {
         Retrofit.Builder builder = new Retrofit.Builder()
