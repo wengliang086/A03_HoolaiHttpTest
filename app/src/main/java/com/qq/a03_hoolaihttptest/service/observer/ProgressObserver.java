@@ -1,4 +1,4 @@
-package com.qq.a03_hoolaihttptest.service.observable;
+package com.qq.a03_hoolaihttptest.service.observer;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -13,14 +13,14 @@ import io.reactivex.disposables.Disposable;
  * Created by Administrator on 2017/3/15.
  */
 
-public class ProgressObservable<T> implements Observer<T>, ProgressCancelListener {
+public class ProgressObserver<T> implements Observer<T>, ProgressCancelListener {
 
     private Context mContext;
-    private ObservableOnNextListener<T> mObservableOnNextListener;
+    private ObserverOnNextListener<T> mObservableOnNextListener;
     private ProgressDialogHandler mProgressDialogHandler;
     private Disposable disposable;
 
-    public ProgressObservable(Context context, ObservableOnNextListener<T> observableOnNextListener) {
+    public ProgressObserver(Context context, ObserverOnNextListener<T> observableOnNextListener) {
         this.mContext = context;
         this.mObservableOnNextListener = observableOnNextListener;
         mProgressDialogHandler = new ProgressDialogHandler(context, this, true);

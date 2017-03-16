@@ -1,8 +1,12 @@
 package com.qq.a03_hoolaihttptest.service.hoolai;
 
+import android.content.Context;
+
 import com.qq.a03_hoolaihttptest.interceptor.HeaderInterceptor;
 import com.qq.a03_hoolaihttptest.interceptor.LoggingInterceptor;
 import com.qq.a03_hoolaihttptest.module.User;
+import com.qq.a03_hoolaihttptest.service.observer.ObserverOnNextListener;
+import com.qq.a03_hoolaihttptest.service.observer.ProgressObserver;
 
 import org.reactivestreams.Subscriber;
 
@@ -91,12 +95,16 @@ public class HoolaiServiceCreater {
                 .subscribe(subscriber);
     }
 
-    public static void rxJavaLogin3(Observer<User> observer, String channelId, int productId, String udid) {
-        toObserver(create().rxJavaLogin2(channelId, productId, udid), observer);
+    public static void rxJavaLogin3(Context context, ObserverOnNextListener<User> observerOnNextListener, String channelId, int productId, String udid) {
+        toObserver(context, create().rxJavaLogin2(channelId, productId, udid), observerOnNextListener);
     }
 
-    private static <T> void toObserver(Observable<HoolaiResponse<T>> flowable, Observer<T> observer) {
-        flowable.map(new HttpResultFunc<T>())
+    private static <T> void toObserver(Context context, Observable<HoolaiResponse<T>> observable, ObserverOnNextListener<T> observerOnNextListener) {
+        toObserver(observable, new ProgressObserver<T>(context, observerOnNextListener));
+    }
+
+    private static <T> void toObserver(Observable<HoolaiResponse<T>> observable, Observer<T> observer) {
+        observable.map(new HttpResultFunc<T>())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

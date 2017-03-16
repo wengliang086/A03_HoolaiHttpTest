@@ -14,8 +14,7 @@ import com.qq.a03_hoolaihttptest.service.flowable.SubscriberOnNextListener;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiResponse;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiService;
 import com.qq.a03_hoolaihttptest.service.hoolai.HoolaiServiceCreater;
-import com.qq.a03_hoolaihttptest.service.observable.ObservableOnNextListener;
-import com.qq.a03_hoolaihttptest.service.observable.ProgressObservable;
+import com.qq.a03_hoolaihttptest.service.observer.ObserverOnNextListener;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -177,15 +176,15 @@ public class MainActivity extends AppCompatActivity {
                 /**
                  * Test取消Http请求
                  */
-//                new ProgressObservable<Object>(this, null).onCancelProgress();
+//                new ProgressObserver<Object>(this, null).onCancelProgress();
                 break;
             case 3:
-                HoolaiServiceCreater.rxJavaLogin3(new ProgressObservable<User>(this, new ObservableOnNextListener<User>() {
+                HoolaiServiceCreater.rxJavaLogin3(this, new ObserverOnNextListener<User>() {
                     @Override
                     public void onNext(User user) {
                         Toast.makeText(MainActivity.this, "type=" + type + " " + new Gson().toJson(user), Toast.LENGTH_SHORT).show();
                     }
-                }), "1", 1, "456oooppp");
+                }, "1", 1, "456oooppp");
                 break;
             case 4:
                 Consumer<HoolaiResponse<User>> nextConsumer = new Consumer<HoolaiResponse<User>>() {
