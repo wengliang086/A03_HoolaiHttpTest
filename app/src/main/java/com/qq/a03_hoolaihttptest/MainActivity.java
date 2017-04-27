@@ -36,7 +36,6 @@ import retrofit2.Response;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
     private HoolaiService service = HoolaiServiceCreater.create();
 
     @Override
